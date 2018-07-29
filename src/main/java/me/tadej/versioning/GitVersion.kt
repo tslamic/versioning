@@ -29,7 +29,7 @@ internal class GitVersion(
     override fun versionCode(): Int = executor.execute(GIT_COMMIT_COUNT, workingDirectory).toInt()
 
     companion object {
-        internal const val GIT_DESCRIBE = "git describe --long --tags --dirty --always"
+        internal const val GIT_DESCRIBE = "git describe --tags --dirty --always"
         internal const val GIT_COMMIT_COUNT = "git rev-list --count HEAD"
     }
 }
