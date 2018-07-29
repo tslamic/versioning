@@ -7,6 +7,7 @@ buildscript {
 plugins {
     id 'java-gradle-plugin'
     id 'com.gradle.plugin-publish' version '0.10.0'
+    id 'com.gradle.build-scan' version '1.15.1'
     id 'org.jetbrains.kotlin.jvm' version '1.2.51'
     id 'com.diffplug.gradle.spotless' version '3.13.0'
     id 'me.tadej.versioning' version '0.1.1'
@@ -71,5 +72,16 @@ pluginBundle {
                 'git', 'version', 'versioning',
             ]
         }
+    }
+}
+
+def CI = System.getenv('CI') == 'true'
+
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
+    if (CI) {
+        publishAlways()
+        tag 'CI'
     }
 }
