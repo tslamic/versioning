@@ -1,0 +1,75 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+plugins {
+    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '0.10.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.2.51'
+    id 'com.diffplug.gradle.spotless' version '3.13.0'
+    id "me.tadej.versioning" version "0.1.0"
+}
+
+apply plugin: 'jacoco'
+
+group = 'me.tadej'
+version = versioning.versionName()
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.51'
+    implementation 'org.apache.commons:commons-exec:1.3'
+
+    testCompile gradleTestKit()
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.google.truth:truth:0.42'
+    testCompile 'org.mockito:mockito-core:2.19.1'
+    testCompile 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC1'
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+spotless {
+    kotlin {
+        target '**/*.kt'
+        ktlint('0.24.0')
+        licenseHeaderFile project.rootProject.file('misc/header.txt')
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+check.dependsOn jacocoTestReport
+
+pluginBundle {
+    def github = 'https://github.com/tslamic/versioning'
+
+    website = github
+    vcsUrl = "${github}.git"
+
+    plugins {
+        versioningPlugin {
+            id = 'me.tadej.versioning'
+            displayName = 'Version tracking for Android'
+            description = 'Helps with version tracking using Git metadata.'
+            tags = [
+                'android', 'versioning', 'version',
+                'git', 'version', 'versioning',
+            ]
+        }
+    }
+}
