@@ -57,6 +57,62 @@ The version code is simply the number of commits:
 $ git rev-list --count HEAD
 ```
 
+## Examples
+
+```shell
+$ git commit -a -m "First commit."
+```
+
+| Op | Result |
+| -- | ------ |
+`versioning.versionCode()` | 1
+`versioning.versionName()` | "3db5953"
+
+```shell
+$ git tag -a 0.1.0 -m "First tag."
+```
+
+| Op | Result |
+| -- | ------ |
+`versioning.versionCode()` | 1
+`versioning.versionName()` | "0.1.0"
+
+```shell
+$ git commit -a -m "Second commit."
+```
+
+| Op | Result |
+| -- | ------ |
+`versioning.versionCode()` | 2
+`versioning.versionName()` | "0.1.0-1-g3db5953"
+
+```shell
+$ echo "Hi, mom!" > hi.txt && git add hi.txt
+```
+
+| Op | Result |
+| -- | ------ |
+`versioning.versionCode()` | 2
+`versioning.versionName()` | "0.1.0-1-g3db5953-dirty"
+
+```shell
+$ git commit -a -m "Second commit."
+```
+
+| Op | Result |
+| -- | ------ |
+`versioning.versionCode()` | 3
+`versioning.versionName()` | "0.1.0-2-g3cbf60f"
+
+```shell
+$ git tag 0.1.1
+```
+
+| Op | Result |
+| -- | ------ |
+`versioning.versionCode()` | 3
+`versioning.versionName()` | "0.1.1"
+
 ## Decorators
 
 You can tweak the version name and/or version code:
