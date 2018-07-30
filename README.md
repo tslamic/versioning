@@ -96,7 +96,7 @@ $ echo "Hi, mom!" > hi.txt && git add hi.txt
 `versioning.versionName()` | "0.1.0-1-g3db5953-dirty"
 
 ```shell
-$ git commit -a -m "Second commit."
+$ git commit -m "Third commit."
 ```
 
 | Op | Result |
