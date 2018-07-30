@@ -1,4 +1,7 @@
-# Versioning [![Build Status](https://travis-ci.org/tslamic/versioning.svg?branch=master)](https://travis-ci.org/tslamic/versioning)
+[![Build Status](https://travis-ci.org/tslamic/versioning.svg?branch=master)](https://travis-ci.org/tslamic/versioning)
+[![codecov](https://codecov.io/gh/tslamic/versioning/branch/master/graph/badge.svg)](https://codecov.io/gh/tslamic/versioning)
+
+# Versioning 
 
 A Grade plugin that makes versioning easier:
 
