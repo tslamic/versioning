@@ -13,19 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.tadej.versioning.cmd
+package me.tadej.versioning
 
-import java.io.File
+import java.io.ByteArrayOutputStream
 import java.io.OutputStream
+import java.nio.charset.Charset
 
-interface CommandLineExecutor {
-    /**
-     * Executes the command and returns the OutputStream denoting the command result.
-     */
-    fun execute(
-        command: String,
-        workingDirectory: File = File("."),
-        timeoutMillis: Long = 10_000,
-        exitValue: Int = 0
-    ): OutputStream
+internal fun String.asOutputStream(charset: Charset = Charsets.UTF_8): OutputStream {
+    val bytes = toByteArray(charset)
+    val stream = ByteArrayOutputStream(bytes.size)
+    stream.write(bytes)
+    return stream
 }

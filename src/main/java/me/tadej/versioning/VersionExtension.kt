@@ -28,21 +28,17 @@ open class VersionExtension : Version {
 
     final override fun versionName(): String {
         val name = version.versionName()
-        val decorator = decorateVersionName
-        return if (decorator == null) {
-            name
-        } else {
-            decorator.call(name)
-        }
+        return decorateVersionName.decorate(name)
     }
 
     override fun versionCode(): Int {
         val code = version.versionCode()
-        val decorator = decorateVersionCode
-        return if (decorator == null) {
-            code
-        } else {
-            decorator.call(code)
-        }
+        return decorateVersionCode.decorate(code)
+    }
+
+    private fun <T> Closure<T>?.decorate(value: T): T = if (this == null) {
+        value
+    } else {
+        call(value)
     }
 }

@@ -16,39 +16,31 @@
 package me.tadej.versioning.cmd
 
 import com.google.common.truth.Truth.assertThat
+import me.tadej.versioning.asOutputStream
 import org.junit.Test
-import java.io.ByteArrayOutputStream
-import java.io.OutputStream
-import java.nio.charset.Charset
 
 class StringConverterTest {
+
     @Test
-    fun adapt_withPlainString_returnsSameString() {
-        val adapter = StringConverter()
+    fun convert_withPlainString_returnsSameString() {
+        val adapter = StringConverter(Charsets.UTF_8)
         val string = "I feel the need - the need for speed!"
 
-        val stream = string.toOutputStream(adapter.charset)
+        val stream = string.asOutputStream(adapter.charset)
         val result = adapter.convert(stream)
 
         assertThat(result).isEqualTo(string)
     }
 
     @Test
-    fun adapt_withTrailingWhitespaceString_returnsTrimmedString() {
-        val adapter = StringConverter()
+    fun convert_withTrailingWhitespaceString_returnsTrimmedString() {
+        val adapter = StringConverter(Charsets.UTF_16)
         val string = "I'm gonna make him an offer he can't refuse."
         val trailing = "\t\n\r $string \n\n\r\t"
 
-        val stream = trailing.toOutputStream(adapter.charset)
+        val stream = trailing.asOutputStream(adapter.charset)
         val result = adapter.convert(stream)
 
         assertThat(result).isEqualTo(string)
-    }
-
-    private fun String.toOutputStream(charset: Charset): OutputStream {
-        val stream = ByteArrayOutputStream(length)
-        val bytes = toByteArray(charset)
-        stream.write(bytes)
-        return stream
     }
 }

@@ -22,7 +22,7 @@ Build script snippet for plugins DSL for Gradle 2.1 and later:
 
 ```groovy
 plugins {
-  id "me.tadej.versioning" version "0.1.1"
+  id "me.tadej.versioning" version "0.2.0"
 }
 ```
 
@@ -58,6 +58,8 @@ $ git rev-list --count HEAD
 ```
 
 ## Examples
+
+ Assume you're executing the commands below in sequential order.
 
 ```shell
 $ git commit -a -m "First commit."
