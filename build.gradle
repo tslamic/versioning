@@ -23,13 +23,12 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.51'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.0'
     implementation 'org.apache.commons:commons-exec:1.3'
 
-    testCompile gradleTestKit()
     testCompile 'junit:junit:4.12'
     testCompile 'com.google.truth:truth:0.42'
-    testCompile 'org.mockito:mockito-core:2.19.1'
+    testCompile 'org.mockito:mockito-core:2.23.0'
     testCompile 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC1'
 }
 
@@ -42,15 +41,17 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 spotless {
     kotlin {
         target '**/*.kt'
-        ktlint('0.24.0')
+        ktlint()
         licenseHeaderFile project.rootProject.file('misc/header.txt')
     }
 }
 
+def CI = System.getenv('CI') == 'true'
+
 jacocoTestReport {
     reports {
         xml.enabled true
-        html.enabled false
+        html.enabled !CI
     }
 }
 
@@ -74,8 +75,6 @@ pluginBundle {
         }
     }
 }
-
-def CI = System.getenv('CI') == 'true'
 
 buildScan {
     termsOfServiceUrl = 'https://gradle.com/terms-of-service'
