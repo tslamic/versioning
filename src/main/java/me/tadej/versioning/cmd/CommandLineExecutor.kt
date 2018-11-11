@@ -24,7 +24,7 @@ interface CommandLineExecutor<out T> {
     fun execute(
         command: String,
         workingDirectory: File = File("."),
-        timeoutMillis: Long = 20_000,
+        timeoutMillis: Long = 10_000,
         exitValue: Int = 0
     ): T
 }
