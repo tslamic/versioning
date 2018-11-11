@@ -36,7 +36,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "gradle.plugin.me.tadej:versioning:0.1.1"
+    classpath "gradle.plugin.me.tadej:versioning:0.2.0"
   }
 }
 
