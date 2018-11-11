@@ -26,30 +26,42 @@ import org.junit.Test
 import java.io.File
 
 class GitVersionTest {
-    private val executor: CommandLineExecutor<String> = mock()
+    private val executor: CommandLineExecutor = mock()
     private val workingDirectory: File = mock()
 
     @Test
     fun versionName_executesCommand() {
-        val git = GitVersion(workingDirectory, executor)
+        val version = GitVersion(workingDirectory, executor)
         val versionName = "versionName"
-        whenever(executor.execute(any(), any(), any(), any())).thenReturn(versionName)
+        val stream = versionName.asOutputStream()
+        whenever(executor.execute(any(), any(), any(), any())).thenReturn(stream)
 
-        val name = git.versionName()
+        val name = version.versionName()
 
-        verify(executor).execute(eq(GitVersion.GIT_DESCRIBE), eq(workingDirectory), any(), any())
         assertThat(name).isEqualTo(versionName)
+        verify(executor).execute(
+            eq(GitVersion.GIT_DESCRIBE),
+            eq(workingDirectory),
+            eq(10_000),
+            eq(0)
+        )
     }
 
     @Test
     fun versionCode_executesCommand() {
-        val git = GitVersion(workingDirectory, executor)
+        val version = GitVersion(workingDirectory, executor)
         val versionCode = 123
-        whenever(executor.execute(any(), any(), any(), any())).thenReturn(versionCode.toString())
+        val stream = versionCode.toString().asOutputStream()
+        whenever(executor.execute(any(), any(), any(), any())).thenReturn(stream)
 
-        val code = git.versionCode()
+        val code = version.versionCode()
 
-        verify(executor).execute(eq(GitVersion.GIT_COMMIT_COUNT), eq(workingDirectory), any(), any())
         assertThat(code).isEqualTo(versionCode)
+        verify(executor).execute(
+            eq(GitVersion.GIT_COMMIT_COUNT),
+            eq(workingDirectory),
+            eq(10_000),
+            eq(0)
+        )
     }
 }
