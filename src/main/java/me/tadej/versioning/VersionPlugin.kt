@@ -21,13 +21,18 @@ import org.gradle.api.Project
 class VersionPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val extension = project.extensions.create(EXTENSION, VersionExtension::class.java)
-        extension.version = GitVersion(project.projectDir)
+        val version = GitVersion(project.projectDir)
+        extension.version = ErrVersion(version)
 
-        val name = project.task("printVersionName").doLast { println(extension.version.versionName()) }
+        val name = project.task("printVersionName").doLast {
+            println(extension.version.versionName())
+        }
         name.group = EXTENSION
         name.description = DESCRIPTION_NAME
 
-        val code = project.task("printVersionCode").doLast { println(extension.version.versionCode()) }
+        val code = project.task("printVersionCode").doLast {
+            println(extension.version.versionCode())
+        }
         code.group = EXTENSION
         code.description = DESCRIPTION_CODE
     }
