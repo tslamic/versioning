@@ -16,15 +16,16 @@
 package me.tadej.versioning.cmd
 
 import java.io.File
+import java.io.OutputStream
 
-interface CommandLineExecutor<out T> {
+interface CommandLineExecutor {
     /**
-     * Executes the command and returns an object representing the result.
+     * Executes the command and returns the OutputStream denoting the command result.
      */
     fun execute(
         command: String,
         workingDirectory: File = File("."),
         timeoutMillis: Long = 10_000,
         exitValue: Int = 0
-    ): T
+    ): OutputStream
 }

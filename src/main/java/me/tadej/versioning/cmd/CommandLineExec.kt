@@ -25,34 +25,29 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.OutputStream
 
-internal class CommandLineExec<out T>(
-    private val converter: CommandLineConverter<T>,
-    private val factory: DefaultExecutorFactory = Factory
-) : CommandLineExecutor<T> {
+internal open class CommandLineExec(
+    private val executorFactory: DefaultExecutorFactory = Factory,
+    private val streamFactory: OutputStreamFactory = Factory
+) : CommandLineExecutor {
 
     @Throws(ExecuteException::class)
-    override fun execute(
+    final override fun execute(
         command: String,
         workingDirectory: File,
         timeoutMillis: Long,
         exitValue: Int
-    ): T {
-        val outputStream = ByteArrayOutputStream(128)
-        val executor = factory.create(
+    ): OutputStream {
+        val outputStream = streamFactory.create()
+        val executor = executorFactory.create(
             workingDirectory,
             outputStream,
             timeoutMillis,
             exitValue
         )
-
         val parsed = CommandLine.parse(command)
         val environment = EnvironmentUtils.getProcEnvironment()
-
-        // Execute the command. If the exit status differs from
-        // the specified exitValue, an `ExecuteException` will be thrown.
         executor.execute(parsed, environment)
-
-        return converter.convert(outputStream)
+        return outputStream
     }
 
     interface DefaultExecutorFactory {
@@ -64,7 +59,11 @@ internal class CommandLineExec<out T>(
         ): DefaultExecutor
     }
 
-    private object Factory : DefaultExecutorFactory {
+    interface OutputStreamFactory {
+        fun create(): OutputStream
+    }
+
+    internal object Factory : DefaultExecutorFactory, OutputStreamFactory {
         override fun create(
             workingDirectory: File,
             outputStream: OutputStream,
@@ -78,5 +77,7 @@ internal class CommandLineExec<out T>(
             executor.setExitValue(exitValue)
             return executor
         }
+
+        override fun create(): OutputStream = ByteArrayOutputStream(128)
     }
 }
